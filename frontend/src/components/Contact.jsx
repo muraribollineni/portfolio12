@@ -2,6 +2,8 @@
 import { useState } from 'react';
 import './Contact.css';
 
+const API_URL = 'https://backend-delta-tan-11.vercel.app';
+
 function Contact() {
 
   const [formData, setFormData] = useState({
@@ -28,7 +30,7 @@ function Contact() {
     setStatus('');
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/contact', {
+      const response = await fetch(`${API_URL}/contact`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -39,7 +41,9 @@ function Contact() {
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.detail || 'Failed to send message');
+        throw new Error(
+          result.detail || 'Failed to send message'
+        );
       }
 
       setStatus('Message sent successfully!');
@@ -52,7 +56,12 @@ function Contact() {
       });
 
     } catch (error) {
-      setStatus(error.message || 'Something went wrong. Please try again.');
+      console.error('Contact form error:', error);
+
+      setStatus(
+        error.message || 'Something went wrong. Please try again.'
+      );
+
     } finally {
       setLoading(false);
     }
